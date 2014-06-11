@@ -21,9 +21,9 @@ module.exports = function(grunt) {
       server : {
         options : {
           base : '.',
-          port : 4949,
+          port : 2014,
           hostname : '*',
-          livereload : 4948
+          livereload : 2015
         }
       }
     },
@@ -48,20 +48,20 @@ module.exports = function(grunt) {
         files : ['js/**/*.js',],
         tasks : ['jshint:all'],
         options : {
-          livereload : 4948
+          livereload : 2015
         }
       },
       stylus : {
         files : ['stylus/**/*.styl'],
         tasks : ['stylus:dev'],
         options : {
-          livereload : 4948
+          livereload : 2015
         }
       },
       html : {
         files : ['./**/*.html'],
         options : {
-          livereload : 4948
+          livereload : 2015
         }
       }
     }
