@@ -160,8 +160,9 @@
   Team.prototype.markOffsidePosition = function(left) {
     for(var i=0,l=this.players.length;i<l;++i) {
       this.players[i].representation.attr({
-        fill : this.players[i].x < left ? '#B13631' : this.color,
-        stroke : this.players[i].x < left ? '#fff' : this.stroke
+        // fill : this.players[i].x < left ? '#B13631' : this.color,
+        stroke : this.players[i].x < left ? '#821B0D' : this.stroke,
+        'stroke-width' : this.players[i].x < left ? 5 : 1.5
       });
     }
   };
