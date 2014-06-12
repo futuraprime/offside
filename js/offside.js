@@ -149,6 +149,20 @@
     }
     return positions;
   };
+  // this supplies the position of offside assuming this team
+  // is defending the left goal
+  Team.prototype.getOffsidePosition = function() {
+    var leftPositions = _.pluck(this.players, 'x');
+    return _.sortBy(leftPositions)[1];
+  };
+  Team.prototype.markOffsidePosition = function(left) {
+    for(var i=0,l=this.players.length;i<l;++i) {
+      this.players[i].representation.attr({
+        fill : this.players[i].x < left ? '#B13631' : this.color,
+        stroke : this.players[i].x < left ? '#fff' : this.stroke
+      });
+    }
+  };
 
   function Player(team) {
     this.team = team;
@@ -190,7 +204,7 @@
     this.group.attr({
       transform : 'translate('+dx+','+dy+')'
     });
-    recalculatePositions();
+    calculateOffsides();
   };
   Player.prototype.onStart = function() {
     this.moveStartX = this.x;
@@ -217,6 +231,11 @@
   var defense = new Team(pitch, '#00477A');
   defense.addPlayer(11);
 
-  // var p = new Player(s);
+
+  // and finally
+  function calculateOffsides() {
+    var offside = defense.getOffsidePosition();
+    offense.markOffsidePosition(offside);
+  }
 
 // }).call(this);
