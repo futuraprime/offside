@@ -1,6 +1,7 @@
 // (function() {
-  function Pitch(field, scale) {
+  function Pitch(field, scale, offset) {
     scale = scale || 1;
+    offset = this.offset = offset || 50;
     function scaleValue(v) {
       v = v || 0;
       return v * scale;
@@ -16,7 +17,7 @@
 
     var g = this.group = field.group();
     g.attr({
-      transform : 'translate(50,50)'
+      transform : 'translate('+offset+','+offset+')'
     });
 
     var padding = 20;
@@ -127,8 +128,8 @@
       positions = [];
       for(i=0,l=this.players.length;i<l;++i) {
         positions.push([
-          Math.random() * this.pitch.length + 50,
-          Math.random() * this.pitch.width + 50
+          Math.random() * this.pitch.length + this.pitch.offset,
+          Math.random() * this.pitch.width + this.pitch.offset
         ]);
       }
     }
@@ -168,8 +169,8 @@
     this.team = team;
     var field = team.field;
     var color = team.color;
-    this.x = Math.random() * team.pitch.length + 50;
-    this.y = Math.random() * team.pitch.width + 50;
+    this.x = Math.random() * team.pitch.length + team.pitch.offset;
+    this.y = Math.random() * team.pitch.width + team.pitch.offset;
     this.group = field.group();
     this.representation = field.circle(this.x,this.y,this.radius);
     this.representation.attr({
@@ -237,5 +238,6 @@
     var offside = defense.getOffsidePosition();
     offense.markOffsidePosition(offside);
   }
+  calculateOffsides();
 
 // }).call(this);
