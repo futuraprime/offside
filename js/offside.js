@@ -265,6 +265,15 @@
     };
     this.representation.attr(newCenter);
     this.clickable.attr(newCenter);
+    if(this.ball) {
+      this.ball.position(this.x - this.radius, this.y);
+    }
+  };
+  Player.prototype.attachBall = function(ball) {
+    this.ball = ball;
+  };
+  Player.prototype.detachBall = function() {
+    this.ball = null;
   };
 
 
@@ -284,18 +293,39 @@
 
   function Ball() {
     var self = this;
+    this.x = 0;
+    this.y = 0;
+    this.container = field.group();
+    this.rotationalContainer = field.group();
+    this.container.add(this.rotationalContainer);
+
     Snap.load('assets/Soccerball.svg', function(f) {
       window.f = f;
       var ball = f.select('#ball');
       field.append(ball);
       self.representation = ball;
 
+
+      // at this size, the ball is 7 px in radius
       ball.attr({
-        transform : 'scale(0.04)'
+        transform : 'translate(-7,-7) scale(0.04)'
       });
       ball.selectAll('.ball-line-segment').attr({'stroke-width' : 0.75 / 0.04});
+      self.rotationalContainer.add(ball);
     });
   }
+  Ball.prototype.position = function(x, y) {
+    this.container.attr({
+      transform : 'translate('+x+','+y+')'
+    });
+  };
+  Ball.prototype.attachToPlayer = function(player) {
+    if(this.player) { this.player.detachBall(); }
+    this.player = player;
+    this.player.group.add(this.container);
+    player.attachBall(this);
+    this.position(player.x - player.radius, player.y);
+  };
 
   var field = Snap('#interactive');
 
