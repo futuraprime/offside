@@ -107,24 +107,34 @@
 
   }
 
-  function Team(side, color) {
-    this.players = [];
+  function Team(field, color) {
+    this.field = field;
     this.color = color;
+    this.players = [];
   }
-  Team.prototype.addPlayer = function() {
-
+  Team.prototype.addPlayer = function(n) {
+    n = n || 1;
+    for(var i=0;i<n;++i) {
+      this.players.push(new Player(this.field, this.color));
+    }
   };
 
-  function Player(field) {
+  function Player(field, color) {
     this.x = 100;
     this.y = 100;
     this.representation = field.circle(this.x,this.y,this.radius);
+    this.representation.attr({
+      fill : color || '#353131',
+      stroke : 'transparent',
+      'stroke-width' : this.clickRadius - this.radius
+    });
     this.representation.drag(
       this.onMove, this.onStart, this.onEnd,
       this, this, this
     );
   }
   Player.prototype.radius = 6;
+  Player.prototype.clickRadius = 25;
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
   // to move the dot around, but then actually move the dot to its final
@@ -153,6 +163,11 @@
 
   var pitch = new Pitch(s, 1.5);
 
-  var p = new Player(s);
+  var offense = new Team(s, '#B13631');
+  offense.addPlayer(5);
+  var defense = new Team(s, '#00477A');
+  defense.addPlayer(5);
+
+  // var p = new Player(s);
 
 }).call(this);
