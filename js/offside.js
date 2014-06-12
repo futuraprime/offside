@@ -116,13 +116,37 @@
   };
 
   function Player(field) {
-    this.representation = field.circle(0,0,this.radius);
-    this.representation.drag(this.onMove.bind(this));
+    this.x = 100;
+    this.y = 100;
+    this.representation = field.circle(this.x,this.y,this.radius);
+    this.representation.drag(
+      this.onMove, this.onStart, this.onEnd,
+      this, this, this
+    );
   }
-  Player.prototype.radius = 10;
-  Player.prototype.onMove = function(evt) {
-    console.log('moving!', arguments);
+  Player.prototype.radius = 6;
+
+  // we're doing a kinda sneaky trick here, so we use (fast) transforms
+  // to move the dot around, but then actually move the dot to its final
+  // position when we're done
+  Player.prototype.onMove = function(dx, dy) {
+    this.x = this.moveStartX + dx;
+    this.y = this.moveStartY + dy;
+    this.representation.attr({
+      transform : 'translate('+dx+','+dy+')'
+    });
     recalculatePositions();
+  };
+  Player.prototype.onStart = function() {
+    this.moveStartX = this.x;
+    this.moveStartY = this.y;
+  };
+  Player.prototype.onEnd = function() {
+    this.representation.attr({
+      transform : '',
+      cx : this.x,
+      cy : this.y
+    });
   };
 
   var s = Snap('#interactive');
