@@ -5,6 +5,9 @@
       v = v || 0;
       return v * scale;
     }
+    this.scaleValue = scaleValue;
+
+    this.field = field;
 
     // these are the dimensions of the Maracana
     // all lengths in feet
@@ -103,38 +106,44 @@
     drawSideBox(true);
   }
 
-  function recalculatePositions() {
-
-  }
-
-  function Team(field, color) {
-    this.field = field;
+  function Team(pitch, color) {
+    this.pitch = pitch;
+    this.field = pitch.field;
     this.color = color;
     this.players = [];
   }
   Team.prototype.addPlayer = function(n) {
     n = n || 1;
     for(var i=0;i<n;++i) {
-      this.players.push(new Player(this.field, this.color));
+      this.players.push(new Player(this));
     }
   };
 
-  function Player(field, color) {
-    this.x = 100;
-    this.y = 100;
+  function Player(team) {
+    this.team = team;
+    var field = team.field;
+    var color = team.color;
+    this.x = Math.random() * team.pitch.length + 50;
+    this.y = Math.random() * team.pitch.width + 50;
+    this.group = field.group();
     this.representation = field.circle(this.x,this.y,this.radius);
     this.representation.attr({
-      fill : color || '#353131',
-      stroke : 'transparent',
-      'stroke-width' : this.clickRadius - this.radius
+      fill : color || '#821B0D',
+      stroke : '#E6E5E5',
+      'stroke-width' : 1.5
     });
-    this.representation.drag(
+    this.clickable = field.circle(this.x,this.y,this.clickRadius).attr({
+      // fill : 'rgba(255,255,255,0.3)'
+      fill : 'transparent'
+    });
+    this.group.add(this.representation, this.clickable);
+    this.group.drag(
       this.onMove, this.onStart, this.onEnd,
       this, this, this
     );
   }
-  Player.prototype.radius = 6;
-  Player.prototype.clickRadius = 25;
+  Player.prototype.radius = 7;
+  Player.prototype.clickRadius = 21;
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
   // to move the dot around, but then actually move the dot to its final
@@ -142,7 +151,7 @@
   Player.prototype.onMove = function(dx, dy) {
     this.x = this.moveStartX + dx;
     this.y = this.moveStartY + dy;
-    this.representation.attr({
+    this.group.attr({
       transform : 'translate('+dx+','+dy+')'
     });
     recalculatePositions();
@@ -152,21 +161,25 @@
     this.moveStartY = this.y;
   };
   Player.prototype.onEnd = function() {
-    this.representation.attr({
-      transform : '',
+    this.group.attr({
+      transform : ''
+    });
+    var newCenter = {
       cx : this.x,
       cy : this.y
-    });
+    };
+    this.representation.attr(newCenter);
+    this.clickable.attr(newCenter);
   };
 
-  var s = Snap('#interactive');
+  var field = Snap('#interactive');
 
-  var pitch = new Pitch(s, 1.5);
+  var pitch = new Pitch(field, 1.5);
 
-  var offense = new Team(s, '#B13631');
-  offense.addPlayer(5);
-  var defense = new Team(s, '#00477A');
-  defense.addPlayer(5);
+  var offense = new Team(pitch, '#B13631');
+  offense.addPlayer(11);
+  var defense = new Team(pitch, '#00477A');
+  defense.addPlayer(11);
 
   // var p = new Player(s);
 
