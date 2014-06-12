@@ -105,7 +105,37 @@
 
     drawSideBox(false);
     drawSideBox(true);
+
+    // note: offside INTENTIONALLY IS NOT SCALED
+    this.offside = 20;
+    this.offsideZone = field.rect(offset, offset, this.offside, w).attr({
+      fill : '#fff',
+      opacity : '0.2'
+    });
+    this.offsideLine = field.line(offset + this.offside, offset, offset + this.offside, offset + w)
+      .attr(lineAttrs)
+      .attr({
+        'stroke-dasharray' : '15 20'
+      });
   }
+  Pitch.prototype.setOffside = function(left) {
+    this.offside = left;
+    this.offsideZone.attr({
+      width : left
+    });
+    this.offsideLine.attr({
+      x1 : this.offset + this.offside,
+      x2 : this.offset + this.offside
+    });
+  };
+  Pitch.prototype.showOffside = function() {
+    this.offsideZone.animate({ opacity : 0.2 }, 200);
+    this.offsideLine.animate({ opacity : 1 }, 200);
+  };
+  Pitch.prototype.hideOffside = function() {
+    this.offsideZone.animate({ opacity : 0 }, 200);
+    this.offsideLine.animate({ opacity : 0 }, 200);
+  };
 
   function Team(pitch, side, color, stroke) {
     this.pitch = pitch;
@@ -266,6 +296,7 @@
   function calculateOffsides() {
     var offside = defense.getOffsidePosition();
     offense.markOffsidePosition(offside);
+    pitch.setOffside(offside - pitch.offset);
   }
   calculateOffsides();
 
