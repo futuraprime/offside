@@ -320,6 +320,10 @@
     this.container.attr({
       transform : 'translate('+x+','+y+')'
     });
+    // this just makes the ball look a bit like it's rolling...
+    this.rotationalContainer.attr({
+      transform : 'rotate('+4*(x+y)+')'
+    });
   };
   Ball.prototype.attachToPlayer = function(player) {
     if(this.player) { this.player.detachBall(); }
