@@ -340,6 +340,7 @@
   // and finally
   function calculateOffsides() {
     var offside = defense.getOffsidePosition();
+    offside = Math.min(offside, pitch.length / 2 + pitch.offset);
     offense.markOffsidePosition(offside);
     pitch.setOffside(offside - pitch.offset);
   }
