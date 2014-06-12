@@ -332,6 +332,34 @@
     player.attachBall(this);
     this.position(player.x - player.radius, player.y);
   };
+  Ball.prototype.passToPlayer = function(player) {
+    var self = this;
+    if(this.player) { this.player.detachBall(); }
+    //LERP
+    var parts = 10;
+    var targetX = player.x - player.radius;
+    var targetY = player.y;
+    // console.log(targetX, targetY);
+    function lerpMe() {
+      if(parts === 0) {
+        self.attachToPlayer(player);
+        return;
+      }
+      var newX = (self.x - targetX) / parts + targetX;
+      var newY = (self.y - targetY) / parts + targetY;
+      // console.log(newX, newY);
+      self.container.animate({
+        transform : 'translate('+newX+','+newY+')'
+      }, 60, lerpMe);
+      self.rotationalContainer.animate({
+        transform : 'rotate('+4*(newX+newY)+')'
+      });
+      self.x = newX;
+      self.y = newY;
+      parts -= 1;
+    }
+    lerpMe();
+  };
 
   var field = Snap('#interactive');
 
@@ -349,7 +377,12 @@
   function calculateOffsides() {
     var offside = defense.getOffsidePosition();
     offside = Math.min(offside, pitch.length / 2 + pitch.offset);
-    if(b.player) { offside = Math.min(offside, b.x); }
+    if(!b.player) {
+      return; // if the ball isn't controlled by a player
+              // then it's passing and offside doesn't move
+              // until it is again
+    }
+    offside = Math.min(offside, b.x);
     offside = Math.max(offside, pitch.offset);
     offense.markOffsidePosition(offside);
     pitch.setOffside(offside - pitch.offset);
