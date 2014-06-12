@@ -139,6 +139,16 @@
       }, 300, mina.easeout);
     }
   };
+  Team.prototype.freezePositions = function() {
+    var positions = [];
+    for(var i=0,l=this.players.length;i<l;++i) {
+      positions.push([
+        this.players[i].x,
+        this.players[i].y
+      ]);
+    }
+    return positions;
+  };
 
   function Player(team) {
     this.team = team;
