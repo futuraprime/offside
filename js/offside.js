@@ -107,8 +107,9 @@
     drawSideBox(true);
   }
 
-  function Team(pitch, color, stroke) {
+  function Team(pitch, side, color, stroke) {
     this.pitch = pitch;
+    this.side = side;
     this.field = pitch.field;
     this.color = color;
     this.stroke = stroke || '#fff';
@@ -117,7 +118,7 @@
   Team.prototype.addPlayer = function(n) {
     n = n || 1;
     for(var i=0;i<n;++i) {
-      this.players.push(new Player(this));
+      this.players.push(i === 0 ? new Goalkeeper(this) : new Player(this));
     }
   };
   // positions should be an array of 2-item arrays [x,y]
@@ -165,7 +166,10 @@
     }
   };
 
-  function Player(team) {
+  function Player() {
+    this.initialize.apply(this, arguments);
+  }
+  Player.prototype.initialize = function(team) {
     this.team = team;
     var field = team.field;
     var color = team.color;
@@ -187,13 +191,22 @@
       this.onMove, this.onStart, this.onEnd,
       this, this, this
     );
-  }
+  };
   Player.prototype.radius = 7;
   Player.prototype.clickRadius = 21;
 
-  Player.prototype.animate = function() {
-    this.representation.animate.apply(this.representation, arguments);
-    this.clickable.animate.apply(this.clickable, arguments);
+  Player.prototype.position = function(x,y) {
+    this.x = x;
+    this.y = y;
+    var newCenter = { cx : this.x, cy : this.y };
+    this.representation.attr(newCenter);
+    this.clickable.attr(newCenter);
+  };
+  Player.prototype.animate = function(attr, duration, easing, callback) {
+    this.representation.animate.call(this.representation, attr, duration, easing);
+    this.clickable.animate.call(this.clickable, attr, duration, easing);
+    if(attr.cx) { this.x = attr.cx; }
+    if(attr.cy) { this.y = attr.cy; }
   };
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
@@ -223,13 +236,28 @@
     this.clickable.attr(newCenter);
   };
 
+
+  function Goalkeeper() {
+    this.initialize.apply(this, arguments);
+  }
+  Goalkeeper.prototype = Object.create(Player.prototype);
+  Goalkeeper.prototype.initialize = function(team) {
+    var pitch = team.pitch;
+    Player.prototype.initialize.apply(this, arguments);
+    // goalkeepers default to their goals
+    this.position(
+      (team.side === 'right' ? pitch.length : 0) + pitch.offset,
+      pitch.width / 2 + pitch.offset
+    );
+  };
+
   var field = Snap('#interactive');
 
   var pitch = new Pitch(field, 1.5);
 
-  var offense = new Team(pitch, '#E6E5E5', '#111');
+  var offense = new Team(pitch, 'right', '#E6E5E5', '#111');
   offense.addPlayer(11);
-  var defense = new Team(pitch, '#00477A');
+  var defense = new Team(pitch, 'left', '#00477A');
   defense.addPlayer(11);
 
 
