@@ -282,6 +282,21 @@
     );
   };
 
+  function Ball() {
+    var self = this;
+    Snap.load('assets/Soccerball.svg', function(f) {
+      window.f = f;
+      var ball = f.select('#ball');
+      field.append(ball);
+      self.representation = ball;
+
+      ball.attr({
+        transform : 'scale(0.04)'
+      });
+      ball.selectAll('.ball-line-segment').attr({'stroke-width' : 0.75 / 0.04});
+    });
+  }
+
   var field = Snap('#interactive');
 
   var pitch = new Pitch(field, 1.5);
@@ -299,5 +314,7 @@
     pitch.setOffside(offside - pitch.offset);
   }
   calculateOffsides();
+
+  var b = new Ball();
 
 // }).call(this);
