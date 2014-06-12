@@ -107,7 +107,7 @@
     drawSideBox(true);
 
     // note: offside INTENTIONALLY IS NOT SCALED
-    this.offside = 20;
+    this.offside = 0;
     this.offsideZone = field.rect(offset, offset, this.offside, w).attr({
       fill : '#fff',
       opacity : '0.2'
@@ -249,6 +249,9 @@
     this.group.attr({
       transform : 'translate('+dx+','+dy+')'
     });
+    if(this.ball) {
+      this.ball.position(this.x - this.radius, this.y);
+    }
     calculateOffsides();
   };
   Player.prototype.onStart = function() {
@@ -265,9 +268,6 @@
     };
     this.representation.attr(newCenter);
     this.clickable.attr(newCenter);
-    if(this.ball) {
-      this.ball.position(this.x - this.radius, this.y);
-    }
   };
   Player.prototype.attachBall = function(ball) {
     this.ball = ball;
@@ -315,6 +315,8 @@
     });
   }
   Ball.prototype.position = function(x, y) {
+    this.x = x;
+    this.y = y;
     this.container.attr({
       transform : 'translate('+x+','+y+')'
     });
@@ -322,7 +324,7 @@
   Ball.prototype.attachToPlayer = function(player) {
     if(this.player) { this.player.detachBall(); }
     this.player = player;
-    this.player.group.add(this.container);
+    // this.player.group.add(this.container);
     player.attachBall(this);
     this.position(player.x - player.radius, player.y);
   };
@@ -336,16 +338,18 @@
   var defense = new Team(pitch, 'left', '#00477A');
   defense.addPlayer(11);
 
+  var b = new Ball();
 
   // and finally
   function calculateOffsides() {
     var offside = defense.getOffsidePosition();
     offside = Math.min(offside, pitch.length / 2 + pitch.offset);
+    if(b.player) { offside = Math.min(offside, b.x); }
+    offside = Math.max(offside, pitch.offset);
     offense.markOffsidePosition(offside);
     pitch.setOffside(offside - pitch.offset);
   }
   calculateOffsides();
 
-  var b = new Ball();
 
 // }).call(this);
