@@ -1,4 +1,4 @@
-(function() {
+// (function() {
   function Pitch(field, scale) {
     scale = scale || 1;
     function scaleValue(v) {
@@ -119,6 +119,26 @@
       this.players.push(new Player(this));
     }
   };
+  // positions should be an array of 2-item arrays [x,y]
+  Team.prototype.repositionPlayers = function(positions) {
+    var i,l;
+
+    if(positions === 'random') {
+      positions = [];
+      for(i=0,l=this.players.length;i<l;++i) {
+        positions.push([
+          Math.random() * this.pitch.length + 50,
+          Math.random() * this.pitch.width + 50
+        ]);
+      }
+    }
+    for(i=0,l=positions.length;i<l;++i) {
+      this.players[i].animate({
+        cx : positions[i][0],
+        cy : positions[i][1]
+      }, 300, mina.easeout);
+    }
+  };
 
   function Player(team) {
     this.team = team;
@@ -145,6 +165,11 @@
   }
   Player.prototype.radius = 7;
   Player.prototype.clickRadius = 21;
+
+  Player.prototype.animate = function() {
+    this.representation.animate.apply(this.representation, arguments);
+    this.clickable.animate.apply(this.clickable, arguments);
+  };
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
   // to move the dot around, but then actually move the dot to its final
@@ -184,4 +209,4 @@
 
   // var p = new Player(s);
 
-}).call(this);
+// }).call(this);
