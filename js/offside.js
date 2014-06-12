@@ -343,6 +343,7 @@
   defense.addPlayer(11);
 
   var b = new Ball();
+  b.attachToPlayer(offense.players[1]);
 
   // and finally
   function calculateOffsides() {
