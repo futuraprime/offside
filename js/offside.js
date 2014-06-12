@@ -106,10 +106,11 @@
     drawSideBox(true);
   }
 
-  function Team(pitch, color) {
+  function Team(pitch, color, stroke) {
     this.pitch = pitch;
     this.field = pitch.field;
     this.color = color;
+    this.stroke = stroke || '#fff';
     this.players = [];
   }
   Team.prototype.addPlayer = function(n) {
@@ -129,7 +130,7 @@
     this.representation = field.circle(this.x,this.y,this.radius);
     this.representation.attr({
       fill : color || '#821B0D',
-      stroke : '#E6E5E5',
+      stroke : this.team.stroke,
       'stroke-width' : 1.5
     });
     this.clickable = field.circle(this.x,this.y,this.clickRadius).attr({
@@ -176,7 +177,7 @@
 
   var pitch = new Pitch(field, 1.5);
 
-  var offense = new Team(pitch, '#B13631');
+  var offense = new Team(pitch, '#E6E5E5', '#111');
   offense.addPlayer(11);
   var defense = new Team(pitch, '#00477A');
   defense.addPlayer(11);
