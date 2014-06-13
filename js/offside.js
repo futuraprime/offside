@@ -110,12 +110,13 @@
     this.offside = 0;
     this.offsideZone = field.rect(offset, offset, this.offside, w).attr({
       fill : '#fff',
-      opacity : '0.2'
+      opacity : 0
     });
     this.offsideLine = field.line(offset + this.offside, offset, offset + this.offside, offset + w)
       .attr(lineAttrs)
       .attr({
-        'stroke-dasharray' : '15 20'
+        'stroke-dasharray' : '15 20',
+        opacity : 0
       });
   }
   Pitch.prototype.setOffside = function(left) {
