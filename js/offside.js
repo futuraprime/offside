@@ -389,5 +389,18 @@
   }
   calculateOffsides();
 
-
+  var soccerShow = false;
+  var $soccerLink = $('#soccer_link').click(function(evt) {
+    console.log(soccerShow, $soccerLink);
+    if(soccerShow) {
+      $soccerLink.removeClass('football-mode');
+      $('.soccer').html('soccer');
+      soccerShow = false;
+    } else {
+      $soccerLink.addClass('football-mode');
+      $('.soccer').html('football');
+      soccerShow = true;
+    }
+    return false;
+  });
 // }).call(this);

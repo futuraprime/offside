@@ -18,3 +18,23 @@ body {
   width: 100%;
   height: 400px;
 }
+
+.interactive-link {
+  text-decoration: none;
+  color: inherit;
+  background-color: #B7B4B4;
+  border-radius: 20px;
+  padding: 0 5px;
+}
+
+#soccer_link {
+  &:after {
+    margin-left: .33em;
+    content: url('../assets/flags_us.png');
+    
+  }
+  &.football-mode:after {
+    content: url('../assets/flags_uk.png');
+  }
+
+}
