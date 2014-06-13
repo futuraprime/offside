@@ -391,7 +391,6 @@
 
   var soccerShow = false;
   var $soccerLink = $('#soccer_link').click(function(evt) {
-    console.log(soccerShow, $soccerLink);
     if(soccerShow) {
       $soccerLink.removeClass('football-mode');
       $('.soccer').html('soccer');
