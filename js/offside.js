@@ -368,8 +368,16 @@
 
   var offense = new Team(pitch, 'right', '#E6E5E5', '#111');
   offense.addPlayer(11);
+  offense.repositionPlayers(
+    [[566,217.25],[350,254],[487,320],[409,249],[482,244],[483,105],
+        [412,318],[415,180],[354,166],[485,174],[415,111]]
+  );
   var defense = new Team(pitch, 'left', '#00477A');
   defense.addPlayer(11);
+  defense.repositionPlayers(
+    [[50,217.25],[200,340],[210,97],[133,218],[254,218],[148,134],
+        [195,172],[194,261],[259,132],[254,299],[145,303]]
+  );
 
   var b = new Ball();
   b.attachToPlayer(offense.players[1]);
