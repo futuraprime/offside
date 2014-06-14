@@ -427,4 +427,23 @@
     }
     return false;
   });
+  var offsideShow = false;
+  var $offsideToggle = $('#offside_toggle').click(function(evt) {
+    if(offsideShow) {
+      $offsideToggle.html('show offside area');
+      pitch.hideOffside();
+      offsideShow = false;
+    } else {
+      $offsideToggle.html('hide offside area');
+      pitch.showOffside();
+      offsideShow = true;
+    }
+    return false;
+  });
+
+  function setInitial() {
+    defense.repositionPlayers([[50,217.25],[224,340],[284,96],[142,248],[339,124],[193,128],[208,180],[371,238],[284,183],[341,314],[203,301]]);
+    // JSON.stringify(offense.freezePositions())
+    offense.repositionPlayers([[566,217.25],[219,239],[437,363],[286,280],[460,291],[424,164],[170,290],[254,256],[258,127],[443,214],[369,142]]);
+  }
 // }).call(this);
