@@ -166,6 +166,7 @@
       }
     }
     for(i=0,l=positions.length;i<l;++i) {
+      if(!positions[i] || !positions[i].length) { continue; }
       this.players[i].animate({
         cx : positions[i][0],
         cy : positions[i][1]
@@ -237,6 +238,10 @@
   Player.prototype.animate = function(attr, duration, easing, callback) {
     this.representation.animate.call(this.representation, attr, duration, easing);
     this.clickable.animate.call(this.clickable, attr, duration, easing);
+    if(this.ball) {
+      // animate the ball...
+      this.ball.animate.call(this.ball, this, attr, duration, easing);
+    }
     if(attr.cx) { this.x = attr.cx; }
     if(attr.cy) { this.y = attr.cy; }
   };
@@ -360,6 +365,17 @@
       parts -= 1;
     }
     lerpMe();
+  };
+  Ball.prototype.animate = function(player, attr, duration, easing, callback) {
+    this.x = attr.cx - player.radius;
+    this.y = attr.cy;
+    transformAttr = {
+      transform : 'translate('+this.x+','+this.y+')',
+    };
+    this.container.animate.call(this.container, transformAttr, duration, easing, callback);
+    this.rotationalContainer.animate.call(this.rotationalContainer, {
+      transform : 'rotate('+4*(this.x+this.y)+')'
+    }, duration, easing);
   };
 
   var field = Snap('#interactive');
