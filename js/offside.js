@@ -414,19 +414,38 @@
   }
   calculateOffsides();
 
-  var soccerShow = false;
-  var $soccerLink = $('#soccer_link').click(function(evt) {
-    if(soccerShow) {
-      $soccerLink.removeClass('football-mode');
-      $('.soccer').html('soccer');
-      soccerShow = false;
-    } else {
-      $soccerLink.addClass('football-mode');
-      $('.soccer').html('football');
-      soccerShow = true;
+  var soccerFsm = new machina.Fsm({
+    initialize : function() {
+      var self = this;
+      this.$soccerLink = $('#soccer_link').click(function() {
+        switch(self.state) {
+          case 'soccer':
+            self.transition('football');
+            break;
+          case 'football':
+            self.transition('soccer');
+            break;
+        }
+        return false;
+      });
+    },
+    initialState : 'soccer',
+    states : {
+      soccer : {
+        _onEnter : function() {
+          $('.soccer').html('soccer');
+          this.$soccerLink.removeClass('football-mode');
+        }
+      },
+      football : {
+        _onEnter : function() {
+          this.$soccerLink.addClass('football-mode');
+          $('.soccer').html('football');
+        }
+      }
     }
-    return false;
   });
+
   var offsideShow = false;
   var $offsideToggle = $('#offside_toggle').click(function(evt) {
     if(offsideShow) {
@@ -442,8 +461,11 @@
   });
 
   function setInitial() {
-    defense.repositionPlayers([[50,217.25],[224,340],[284,96],[142,248],[339,124],[193,128],[208,180],[371,238],[284,183],[341,314],[203,301]]);
-    // JSON.stringify(offense.freezePositions())
-    offense.repositionPlayers([[566,217.25],[219,239],[437,363],[286,280],[460,291],[424,164],[170,290],[254,256],[258,127],[443,214],[369,142]]);
+    defense.repositionPlayers(
+      [[50,217.25],[224,340],[284,96],[142,248],[339,124],[193,128],
+        [208,180],[371,238],[284,183],[341,314],[203,301]]);
+    offense.repositionPlayers(
+      [[566,217.25],[219,239],[437,363],[286,280],[460,291],[424,164],
+        [170,290],[254,256],[258,127],[443,214],[369,142]]);
   }
 // }).call(this);
