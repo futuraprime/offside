@@ -266,6 +266,12 @@
     if(this.ball) { this.ball.hide(); }
     this.hidden = true;
   };
+  Player.prototype.highlight = function() {
+    this.representation.animate({
+      stroke : '#D0A95C',
+      'stroke-width' : 5
+    }, 300);
+  };
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
   // to move the dot around, but then actually move the dot to its final
