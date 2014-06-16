@@ -251,11 +251,26 @@
     if(attr.cx) { this.x = attr.cx; }
     if(attr.cy) { this.y = attr.cy; }
   };
+  Player.prototype.show = function(dur) {
+    this.representation.animate({
+      opacity : 1
+    }, dur);
+    if(this.ball) { this.ball.show(); }
+    this.hidden = false;
+  };
+  Player.prototype.hide = function(dur) {
+    this.representation.animate({
+      opacity : 0
+    }, dur);
+    if(this.ball) { this.ball.hide(); }
+    this.hidden = true;
+  };
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
   // to move the dot around, but then actually move the dot to its final
   // position when we're done
   Player.prototype.onMove = function(dx, dy) {
+    if(this.hidden) { return; }
     this.x = this.moveStartX + dx;
     this.y = this.moveStartY + dy;
     this.group.attr({
@@ -267,10 +282,12 @@
     calculateOffsides();
   };
   Player.prototype.onStart = function() {
+    if(this.hidden) { return; }
     this.moveStartX = this.x;
     this.moveStartY = this.y;
   };
   Player.prototype.onEnd = function() {
+    if(this.hidden) { return; }
     this.group.attr({
       transform : ''
     });
@@ -316,7 +333,6 @@
       var ball = f.select('#ball');
       field.append(ball);
       self.representation = ball;
-
 
       // at this size, the ball is 7 px in radius
       ball.attr({
@@ -382,6 +398,16 @@
     this.rotationalContainer.animate.call(this.rotationalContainer, {
       transform : 'rotate('+4*(this.x+this.y)+')'
     }, duration, easing);
+  };
+  Ball.prototype.hide = function(dur) {
+    this.container.animate({
+      opacity : 0
+    }, dur);
+  };
+  Ball.prototype.show = function(dur) {
+    this.container.animate({
+      opacity : 1
+    }, dur);
   };
 
   var field = Snap('#interactive');
