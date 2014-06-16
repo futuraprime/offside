@@ -178,6 +178,7 @@
         cy : positions[i][1]
       }, 300, mina.easeout);
     }
+    calculateOffsides();
   };
   Team.prototype.freezePositions = function() {
     var positions = [];
@@ -416,16 +417,8 @@
 
   var offense = new Team(pitch, 'right', '#E6E5E5', '#111');
   offense.addPlayer(11);
-  offense.repositionPlayers(
-    [[566,217.25],[350,254],[487,320],[409,249],[482,244],[483,105],
-        [412,318],[415,180],[354,166],[485,174],[415,111]]
-  );
   var defense = new Team(pitch, 'left', '#00477A');
   defense.addPlayer(11);
-  defense.repositionPlayers(
-    [[50,217.25],[200,340],[210,97],[133,218],[254,218],[148,134],
-        [195,172],[194,261],[259,132],[254,299],[145,303]]
-  );
 
   var b = new Ball();
   b.attachToPlayer(offense.players[1]);
@@ -512,20 +505,36 @@
 
   var playersFsm = new machina.Fsm({
     initialize : function() {
-
+      var self = this;
+      this.$changers = $('a.state-changer').click(function() {
+        self.transition(this.getAttribute('data-state'));
+        return false;
+      });
     },
-    initialState : 'hidden',
-    hidden : {
-      _onEnter : function() {}
+    initialState : 'standard_position',
+    states : {
+      standard_position : {
+        _onEnter : function() {
+          offense.repositionPlayers(
+            [[566,217.25],[350,254],[487,320],[409,249],[482,244],[483,105],
+                [412,318],[415,180],[354,166],[485,174],[415,111]]
+          );
+          defense.repositionPlayers(
+            [[50,217.25],[200,340],[210,97],[133,218],[254,218],[148,134],
+                [195,172],[194,261],[259,132],[254,299],[145,303]]
+          );
+        }
+      },
+      normal_attack : {
+        _onEnter : function() {
+          defense.repositionPlayers(
+            [[50,217.25],[224,340],[284,96],[142,248],[339,124],[193,128],
+              [208,180],[371,238],[284,183],[341,314],[203,301]]);
+          offense.repositionPlayers(
+            [[566,217.25],[219,239],[437,363],[286,280],[460,291],[424,164],
+              [170,290],[254,256],[258,127],[443,214],[369,142]]);
+        }
+      }
     }
   });
-
-  function setInitial() {
-    defense.repositionPlayers(
-      [[50,217.25],[224,340],[284,96],[142,248],[339,124],[193,128],
-        [208,180],[371,238],[284,183],[341,314],[203,301]]);
-    offense.repositionPlayers(
-      [[566,217.25],[219,239],[437,363],[286,280],[460,291],[424,164],
-        [170,290],[254,256],[258,127],[443,214],[369,142]]);
-  }
 // }).call(this);

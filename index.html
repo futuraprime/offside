@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Offside</title>
-    <meta charset="utf-8"/>
-    <script type="text/javascript" src="//use.typekit.net/kso0koy.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-    <script src="deps/jquery/dist/jquery.js"></script>
-    <script type="text/javascript" src="deps/lodash/dist/lodash.js"></script>
-    <script type="text/javascript" src="deps/machina/lib/machina.js"></script>
-    <script type="text/javascript" src="deps/snap.svg/dist/snap.svg.js"></script>
-    <link rel="stylesheet" href="css/style.css" />
+  <title>Offside</title>
+  <meta charset="utf-8"/>
+  <script type="text/javascript" src="//use.typekit.net/kso0koy.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+  <script src="deps/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="deps/lodash/dist/lodash.js"></script>
+  <script type="text/javascript" src="deps/machina/lib/machina.js"></script>
+  <script type="text/javascript" src="deps/snap.svg/dist/snap.svg.js"></script>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-    <h1>What's Offside?</h1>
-    <div class="intro-text">
-        <p>If you&rsquo;re watching the World Cup this month, you&rsquo;ll certainly encounter the offside rule a few times. What's &ldquo;offside&rdquo; mean?</p>
-        <p>The offside rule in <a href="#" id="soccer_link" class="interactive-link"><span class="soccer">soccer</span></a> is mostly about passing: in a nutshell, it says you can&rsquo;t pass the ball ahead of the defense. More specifically, it says you cannot receive the ball or interfere with play if you are:</p>
-        <ul>
-            <li>in the opposing team's half,</li>
-            <li>closer to the opposing team's goal line than the ball is, and</li>
-            <li>closer to the opposing team's goal line than all but one defender.</li>
-        </ul>
-        <p>What's that look like?</p>
-    </div>
+  <h1>What's Offside?</h1>
+  <div class="intro-text">
+    <p>If you&rsquo;re watching the World Cup this month, you&rsquo;ll certainly encounter the offside rule a few times. What's &ldquo;offside&rdquo; mean?</p>
+    <p>The offside rule in <a href="#" id="soccer_link" class="interactive-link"><span class="soccer">soccer</span></a> is mostly about passing: in a nutshell, it says you can&rsquo;t pass the ball ahead of the defense. More specifically, it says you cannot receive the ball or interfere with play if you are:</p>
+    <ul>
+      <li>in the opposing team's half,</li>
+      <li>closer to the opposing team's goal line than the ball is, and</li>
+      <li>closer to the opposing team's goal line than all but one defender.</li>
+    </ul>
+    <p>What's that look like?</p>
+  </div>
 
-    <svg id="interactive"></svg>
+  <svg id="interactive"></svg>
 
-    <div class="section-text">
-        <div class="section">
-          Here's a <span class="soccer">soccer</span> pitch. The offensive side is in white, the defense in blue. You can <span class="click">click</span> to <a href="#" id="offside_toggle" class="interactive-link" data-show-text="show the offside area" data-hide-text="hide the offside area">show the offside area</a>&mdash;the part of the pitch where an offensive player would be offside.
-        </div>
-    </div>
+  <div class="section-text">
+    <p class="section">
+      Here's a <span class="soccer">soccer</span> pitch. The attacking side is in white, the defense in blue. You can <span class="click">click</span> to <a href="#" id="offside_toggle" class="interactive-link" data-show-text="show the offside area" data-hide-text="hide the offside area">show the offside area</a>&mdash;the part of the pitch where an attacking player would be offside.
+    </p>
+    <p class="section">
+      On a <a href="#" class="state-changer interactive-link" data-state="normal_attack">normal attack</a>
+    </p>
+  </div>
 
-    <script type="text/javascript" src="js/offside.js"></script>
+  <script type="text/javascript" src="js/offside.js"></script>
 </body>
 </html>
