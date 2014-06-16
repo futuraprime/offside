@@ -1,4 +1,10 @@
 // (function() {
+  var touchActive = 'ontouchstart' in window;
+
+  if(touchActive) {
+    $('.click').html('touch');
+  }
+
   function Pitch(field, scale, offset) {
     scale = scale || 1;
     offset = this.offset = offset || 50;
@@ -446,18 +452,46 @@
     }
   });
 
-  var offsideShow = false;
-  var $offsideToggle = $('#offside_toggle').click(function(evt) {
-    if(offsideShow) {
-      $offsideToggle.html('show offside area');
-      pitch.hideOffside();
-      offsideShow = false;
-    } else {
-      $offsideToggle.html('hide offside area');
-      pitch.showOffside();
-      offsideShow = true;
+  var offsideFsm = new machina.Fsm({
+    initialize : function() {
+      var self = this;
+      this.$offsideToggle = $('#offside_toggle').click(function() {
+        switch(self.state) {
+          case 'show':
+            self.transition('hide');
+            break;
+          case 'hide':
+            self.transition('show');
+            break;
+        }
+        return false;
+      });
+    },
+    initialState : 'hide',
+    states : {
+      hide : {
+        _onEnter : function() {
+          this.$offsideToggle.html(this.$offsideToggle.attr('data-show-text'));
+          pitch.hideOffside();
+        }
+      },
+      show : {
+        _onEnter : function() {
+          this.$offsideToggle.html(this.$offsideToggle.attr('data-hide-text'));
+          pitch.showOffside();
+        }
+      }
     }
-    return false;
+  });
+
+  var playersFsm = new machina.Fsm({
+    initialize : function() {
+
+    },
+    initialState : 'hidden',
+    hidden : {
+      _onEnter : function() {}
+    }
   });
 
   function setInitial() {
