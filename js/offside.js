@@ -287,6 +287,7 @@
       this.ball.position(this.x - this.radius, this.y);
     }
     calculateOffsides();
+    playersFsm.transition('in_motion');
   };
   Player.prototype.onStart = function() {
     if(this.hidden) { return; }
@@ -486,14 +487,16 @@
             self.transition('hide');
             break;
           case 'hide':
+            /* falls through */
+          default:
             self.transition('show');
-            break;
         }
         return false;
       });
     },
-    initialState : 'hide',
+    initialState : 'nil',
     states : {
+      nil : null,
       hide : {
         _onEnter : function() {
           this.$offsideToggle.html(this.$offsideToggle.attr('data-show-text'));
@@ -519,6 +522,10 @@
     },
     initialState : 'standard_position',
     states : {
+      in_motion : {
+        // this state does nothing, just indicates that
+        // the position has been changed from a specified one
+      },
       standard_position : {
         _onEnter : function() {
           offense.repositionPlayers(
