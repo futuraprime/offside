@@ -12,7 +12,12 @@
       v = v || 0;
       return v * scale;
     }
+    function unscaleValue(v) {
+      v = v || 0;
+      return v / scale;
+    }
     this.scaleValue = scaleValue;
+    this.unscaleValue = unscaleValue;
 
     this.field = field;
 
@@ -174,8 +179,8 @@
     for(i=0,l=positions.length;i<l;++i) {
       if(!positions[i] || !positions[i].length) { continue; }
       this.players[i].animate({
-        cx : positions[i][0],
-        cy : positions[i][1]
+        cx : this.pitch.scaleValue(positions[i][0]),
+        cy : this.pitch.scaleValue(positions[i][1])
       }, 300, mina.easeout);
     }
     calculateOffsides();
@@ -184,11 +189,11 @@
     var positions = [];
     for(var i=0,l=this.players.length;i<l;++i) {
       positions.push([
-        this.players[i].x,
-        this.players[i].y
+        Math.round(this.pitch.unscaleValue(this.players[i].x)),
+        Math.round(this.pitch.unscaleValue(this.players[i].y))
       ]);
     }
-    return positions;
+    return JSON.stringify(positions);
   };
   // this supplies the position of offside assuming this team
   // is defending the left goal
@@ -529,23 +534,21 @@
       standard_position : {
         _onEnter : function() {
           offense.repositionPlayers(
-            [[566,217.25],[350,254],[487,320],[409,249],[482,244],[483,105],
-                [412,318],[415,180],[354,166],[485,174],[415,111]]
-          );
+            [[377,145],[233,169],[325,213],[273,166],[321,163],[322,70],
+                [275,212],[277,120],[236,111],[323,116],[277,74]]);
           defense.repositionPlayers(
-            [[50,217.25],[200,340],[210,97],[133,218],[254,218],[148,134],
-                [195,172],[194,261],[259,132],[254,299],[145,303]]
-          );
+            [[33,145],[133,227],[140,65],[89,145],[169,145],[99,89],
+                [130,115],[129,174],[173,88],[169,199],[97,202]]);
         }
       },
       normal_attack : {
         _onEnter : function() {
-          defense.repositionPlayers(
-            [[50,217.25],[224,340],[284,96],[142,248],[339,124],[193,128],
-              [208,180],[371,238],[284,183],[341,314],[203,301]]);
           offense.repositionPlayers(
-            [[566,217.25],[219,239],[437,363],[286,280],[460,291],[424,164],
-              [170,290],[254,256],[258,127],[443,214],[369,142]]);
+            [[377,145],[146,159],[291,242],[191,187],[307,194],[283,109],
+                [113,193],[169,171],[172,85],[295,143],[246,95]]);
+          defense.repositionPlayers(
+            [[33,145],[149,227],[189,64],[95,165],[226,83],[129,85],
+                [139,120],[247,159],[189,122],[227,209],[135,201]]);
         }
       }
     }
