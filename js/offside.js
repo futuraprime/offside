@@ -43,7 +43,7 @@
       stroke : 'none',
       r : 4
     };
-    var pitchColor = '#337331';
+    var pitchColor = '#77B479';
 
     this.background = field.rect(-padding,-padding,l+padding*2,w+padding*2);
     this.background.attr({
@@ -120,7 +120,7 @@
     // note: offside INTENTIONALLY IS NOT SCALED
     this.offside = 0;
     this.offsideZone = field.rect(offset, offset, this.offside, w).attr({
-      fill : '#fff',
+      fill : '#821B0D',
       opacity : 0
     });
     this.offsideLine = field.line(offset + this.offside, offset, offset + this.offside, offset + w)
