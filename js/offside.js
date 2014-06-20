@@ -525,6 +525,13 @@
         self.transition(this.getAttribute('data-state'));
         return false;
       });
+      this.$eventChangers = $('a.event-changer').click(function() {
+        if(this.getAttribute('data-state')) {
+          self.transition(this.getAttribute('data-state'));
+        }
+        self.handle(this.getAttribute('data-event'));
+        return false;
+      });
     },
     initialState : 'standard_position',
     states : {
@@ -544,6 +551,9 @@
       },
       normal_attack : {
         _onEnter : function() {
+          this.handle('starting_position');
+        },
+        starting_position : function() {
           offense.repositionPlayers(
             [[377,145],[146,159],[291,242],[191,187],[307,194],[283,109],
                 [113,193],[169,171],[172,85],[295,143],[246,95]]);
@@ -551,18 +561,18 @@
             [[33,145],[149,227],[189,64],[95,165],[226,83],[129,85],
                 [139,120],[247,159],[189,122],[227,209],[135,201]]);
           b.attachToPlayer(offense.players[1]);
-        }
-      },
-      over_forward : {
-        _onEnter : function() {
-          offense.repositionPlayers(
-            [[377,145],[133,172],[266,239],[184,185],[281,193],
-                [260,62],[75,196],[156,154],[145,90],[277,138],[227,103]]);
-          defense.repositionPlayers(
-            [[33,145],[149,227],[189,64],[92,162],[199,86],[114,69],
-                [122,115],[216,157],[173,122],[207,222],[135,201]]);
+        },
+        over_forward : function() {
           setTimeout(function() {
-            b.passToPlayer(offense.players[6]);
+            offense.repositionPlayers(
+              [[377,145],[133,172],[266,239],[184,185],[281,193],
+                  [260,62],[75,196],[156,154],[145,90],[277,138],[227,103]]);
+            defense.repositionPlayers(
+              [[33,145],[149,227],[189,64],[92,162],[199,86],[114,69],
+                  [122,115],[216,157],[173,122],[207,222],[135,201]]);
+            setTimeout(function() {
+              b.passToPlayer(offense.players[6]);
+            }, 500);
           }, 500);
         }
       }
