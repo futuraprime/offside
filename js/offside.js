@@ -373,8 +373,9 @@
     player.attachBall(this);
     this.position(player.x - player.radius, player.y);
   };
-  Ball.prototype.passToPlayer = function(player) {
+  Ball.prototype.passToPlayer = function(player, dur) {
     var self = this;
+    dur = dur || 120;
     if(this.player) { this.player.detachBall(); }
     //LERP
     var parts = 10;
@@ -391,7 +392,7 @@
       // console.log(newX, newY);
       self.container.animate({
         transform : 'translate('+newX+','+newY+')'
-      }, 60, lerpMe);
+      }, dur, lerpMe);
       self.rotationalContainer.animate({
         transform : 'rotate('+4*(newX+newY)+')'
       });
@@ -549,6 +550,20 @@
           defense.repositionPlayers(
             [[33,145],[149,227],[189,64],[95,165],[226,83],[129,85],
                 [139,120],[247,159],[189,122],[227,209],[135,201]]);
+          b.attachToPlayer(offense.players[1]);
+        }
+      },
+      over_forward : {
+        _onEnter : function() {
+          offense.repositionPlayers(
+            [[377,145],[133,172],[266,239],[184,185],[281,193],
+                [260,62],[75,196],[156,154],[145,90],[277,138],[227,103]]);
+          defense.repositionPlayers(
+            [[33,145],[149,227],[189,64],[92,162],[199,86],[114,69],
+                [122,115],[216,157],[173,122],[207,222],[135,201]]);
+          setTimeout(function() {
+            b.passToPlayer(offense.players[6]);
+          }, 500);
         }
       }
     }
