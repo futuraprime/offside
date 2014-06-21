@@ -291,7 +291,7 @@
   };
   Player.prototype.clearShadow = function() {
     this.shadow.remove();
-  }
+  };
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
   // to move the dot around, but then actually move the dot to its final
@@ -382,23 +382,28 @@
     });
   };
   Ball.prototype.attachToPlayer = function(player) {
+    if(this.player === player) { return; }
     if(this.player) { this.player.detachBall(); }
     this.player = player;
     // this.player.group.add(this.container);
     player.attachBall(this);
     this.position(player.x - player.radius, player.y);
+    this.rotationalContainer.attr({
+      transform : 'rotate('+4*(player.x-player.radius+player.y)+')'
+    });
   };
   Ball.prototype.passToPlayer = function(player, dur) {
     var self = this;
     dur = dur || 120;
     if(this.player) { this.player.detachBall(); }
     //LERP
-    var parts = 10;
+    var parts = 5;
     var targetX = player.x - player.radius;
     var targetY = player.y;
     // console.log(targetX, targetY);
     function lerpMe() {
       if(parts === 0) {
+        console.log('attaching to new player');
         self.attachToPlayer(player);
         return;
       }
@@ -566,29 +571,34 @@
       },
       normal_attack : {
         _onEnter : function() {
+          this.timeouts = {};
           this.handle('starting_position');
         },
         starting_position : function() {
+          console.log('starting position');
+          b.attachToPlayer(offense.players[1]);
           offense.repositionPlayers(
             [[377,145],[146,159],[291,242],[191,187],[307,194],[283,109],
                 [113,193],[169,171],[172,85],[295,143],[246,95]]);
           defense.repositionPlayers(
             [[33,145],[149,227],[189,64],[95,165],[226,83],[129,85],
                 [139,120],[247,159],[189,122],[227,209],[135,201]]);
-          b.attachToPlayer(offense.players[1]);
         },
         over_forward : function() {
+          var self = this;
+          clearTimeout(this.timeouts.repositionTimeout);
+          clearTimeout(this.timeouts.forwardPassTimeout);
           this.handle('starting_position', 20);
-          setTimeout(function() {
+          this.timeouts.repositionTimeout = setTimeout(function() {
             offense.repositionPlayers(
               [[377,145],[133,172],[266,239],[184,185],[281,193],
                   [260,62],[75,196],[156,154],[145,90],[277,138],[227,103]]);
             defense.repositionPlayers(
               [[33,145],[149,227],[189,64],[92,162],[199,86],[114,69],
                   [122,115],[216,157],[173,122],[207,222],[135,201]]);
-            setTimeout(function() {
+            self.timeouts.forwardPassTimeout = setTimeout(function() {
               b.passToPlayer(offense.players[6]);
-            }, 500);
+            }, 700);
           }, 600);
         }
       }
