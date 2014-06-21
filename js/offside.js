@@ -370,6 +370,14 @@
       self.rotationalContainer.add(ball);
     });
   }
+  Ball.prototype.getRotationString = function(x, y) {
+    x = x || this.x;
+    y = y || this.y;
+    var rotation = 4 * (x + y);
+    console.log('setting rotationalContainer to', rotation);
+    rotation = 0;
+    return 'rotate('+rotation+')';
+  };
   Ball.prototype.position = function(x, y) {
     this.x = x;
     this.y = y;
@@ -378,7 +386,7 @@
     });
     // this just makes the ball look a bit like it's rolling...
     this.rotationalContainer.attr({
-      transform : 'rotate('+4*(x+y)+')'
+      transform : this.getRotationString()
     });
   };
   Ball.prototype.attachToPlayer = function(player) {
@@ -388,16 +396,13 @@
     // this.player.group.add(this.container);
     player.attachBall(this);
     this.position(player.x - player.radius, player.y);
-    this.rotationalContainer.attr({
-      transform : 'rotate('+4*(player.x-player.radius+player.y)+')'
-    });
   };
   Ball.prototype.passToPlayer = function(player, dur) {
     var self = this;
     dur = dur || 120;
     if(this.player) { this.player.detachBall(); }
     //LERP
-    var parts = 5;
+    var parts = 6;
     var targetX = player.x - player.radius;
     var targetY = player.y;
     // console.log(targetX, targetY);
@@ -414,7 +419,7 @@
         transform : 'translate('+newX+','+newY+')'
       }, dur, lerpMe);
       self.rotationalContainer.animate({
-        transform : 'rotate('+4*(newX+newY)+')'
+        transform : self.getRotationString(newX, newY)
       });
       self.x = newX;
       self.y = newY;
@@ -430,7 +435,7 @@
     };
     this.container.animate.call(this.container, transformAttr, duration, easing, callback);
     this.rotationalContainer.animate.call(this.rotationalContainer, {
-      transform : 'rotate('+4*(this.x+this.y)+')'
+      transform : this.getRotationString()
     }, duration, easing);
   };
   Ball.prototype.hide = function(dur) {
