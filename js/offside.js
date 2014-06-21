@@ -277,6 +277,21 @@
       'stroke-width' : 5
     }, 300);
   };
+  Player.prototype.spawnShadow = function() {
+    if(this.shadow) {
+      this.clearShadow();
+    }
+    this.shadow = this.field.circle(this.x, this.y, this.radius);
+    this.shadow.attr({
+      fill : color || '#821B0D',
+      stroke : this.team.stroke,
+      'stroke-width' : 2,
+      opacity : 0.5
+    });
+  };
+  Player.prototype.clearShadow = function() {
+    this.shadow.remove();
+  }
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
   // to move the dot around, but then actually move the dot to its final
