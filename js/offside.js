@@ -563,6 +563,7 @@
           b.attachToPlayer(offense.players[1]);
         },
         over_forward : function() {
+          this.handle('starting_position', 20);
           setTimeout(function() {
             offense.repositionPlayers(
               [[377,145],[133,172],[266,239],[184,185],[281,193],
@@ -573,7 +574,7 @@
             setTimeout(function() {
               b.passToPlayer(offense.players[6]);
             }, 500);
-          }, 500);
+          }, 600);
         }
       }
     }
