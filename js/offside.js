@@ -611,13 +611,11 @@
   });
 
   var $interactive = $('#interactive');
-  var interactive_h = $interactive.offset().top;
+  var interactive_h = $interactive.offset().top + pitch.padding;
   function scrollCorrect() {
     var y = window.scrollY;
     var h = interactive_h;
-    console.log(y, h);
     if(y > h) {
-      console.log('over');
       $interactive.css('transform', 'translate3d(0, '+(y-h)+'px, 0)');
     } else {
       $interactive.css({
