@@ -31,7 +31,7 @@
       transform : 'translate('+offset+','+offset+')'
     });
 
-    var padding = 20;
+    var padding = this.padding = 20;
     var lineAttrs = {
       fill : 'none',
       stroke : '#fff',
@@ -609,4 +609,24 @@
       }
     }
   });
+
+  var $interactive = $('#interactive');
+  var interactive_h = $interactive.offset().top;
+  function scrollCorrect() {
+    var y = window.scrollY;
+    var h = interactive_h;
+    console.log(y, h);
+    if(y > h) {
+      console.log('over');
+      $interactive.css('transform', 'translate3d(0, '+(y-h)+'px, 0)');
+    } else {
+      $interactive.css({
+        transform : 'none'
+      });
+
+    }
+  }
+
+  window.onscroll = _.throttle(scrollCorrect, 5);
+
 // }).call(this);
