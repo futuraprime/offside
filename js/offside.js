@@ -229,6 +229,16 @@
       });
     }
   };
+  Team.prototype.leaveShadows = function(){
+    for (var i = this.players.length - 1; i >= 0; i--) {
+      this.players[i].spawnShadow();
+    }
+  };
+  Team.prototype.clearShadows = function() {
+    for (var i = this.players.length - 1; i >= 0; i--) {
+      this.players[i].clearShadow();
+    }
+  };
 
 
   // ============================================ //
@@ -308,16 +318,19 @@
     if(this.shadow) {
       this.clearShadow();
     }
-    this.shadow = this.field.circle(this.x, this.y, this.radius);
+    this.shadow = this.team.field.circle(this.x, this.y, this.radius);
+    console.log(this.team.color);
     this.shadow.attr({
-      fill : color || '#821B0D',
+      fill : this.team.color || '#821B0D',
       stroke : this.team.stroke,
       'stroke-width' : 2,
       opacity : 0.5
     });
   };
   Player.prototype.clearShadow = function() {
-    this.shadow.remove();
+    if(this.shadow) {
+      this.shadow.remove();
+    }
   };
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
@@ -645,6 +658,8 @@
         },
         starting_position : function() {
           console.log('starting position');
+          offense.clearShadows();
+          defense.clearShadows();
           b.attachToPlayer(offense.players[1]);
           offense.repositionPlayers(
             [[377,145],[146,159],[291,242],[191,187],[307,194],[283,109],
@@ -677,6 +692,8 @@
           this.handle('starting_position', 20);
           self.timeouts.forwardPassTimeout = setTimeout(function() {
             b.passToPlayer(offense.players[6]);
+            offense.leaveShadows();
+            defense.leaveShadows();
           }, 450);
           this.timeouts.repositionTimeout = setTimeout(function() {
             offense.repositionPlayers(
