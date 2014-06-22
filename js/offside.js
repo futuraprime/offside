@@ -30,8 +30,8 @@
 
     // these are the dimensions of the Maracana
     // all lengths in feet
-    var l = this.length = scaleValue(344);
-    var w = this.width = scaleValue(223);
+    var l = this.length = scaleValue(this.standardLength);
+    var w = this.width = scaleValue(this.standardWidth);
 
     var g = this.group = field.group();
     g.attr({
@@ -137,6 +137,8 @@
         opacity : 0
       });
   }
+  Pitch.prototype.standardLength = 334;
+  Pitch.prototype.standardWidth = 223;
   Pitch.prototype.setOffside = function(left) {
     this.offside = left;
     this.offsideZone.attr({
@@ -535,7 +537,13 @@
   // ============================================ //
   var field = Snap('#interactive');
 
-  var pitch = new Pitch(field, 1.5);
+  console.log(window.innerHeight);
+  var pitchDesiredHeight = window.innerHeight / 2.1;
+  var pitchScaleFactor = Math.min(1.5, pitchDesiredHeight/Pitch.prototype.standardWidth);
+  var pitch = new Pitch(field, pitchScaleFactor);
+  $('#interactive').css({
+    height : pitch.width + pitch.padding * 3
+  });
 
   var offense = new Team(pitch, 'right', '#E6E5E5', '#111');
   offense.addPlayer(11);
