@@ -5,6 +5,13 @@
     $('.click').html('touch');
   }
 
+  // ============================================ //
+  // Pitch                                        //
+  //                                              //
+  // This sets up the base SVG object and holds   //
+  // all the things that go on the pitch in its   //
+  // various groups. It also handles scaling.     //
+  // ============================================ //
   function Pitch(field, scale, offset) {
     scale = scale || 1;
     offset = this.offset = offset || 50;
@@ -149,6 +156,15 @@
     this.offsideLine.animate({ opacity : 0 }, 200);
   };
 
+
+
+  // ============================================ //
+  // Team                                         //
+  //                                              //
+  // Teams handle collections of players who are  //
+  // together on a side. They also handle moving  //
+  // players around.                              //
+  // ============================================ //
   function Team(pitch, side, color, stroke) {
     this.pitch = pitch;
     this.side = side;
@@ -214,6 +230,14 @@
     }
   };
 
+
+  // ============================================ //
+  // Player                                       //
+  //                                              //
+  // Players handle their own representations on  //
+  // the pitch, as well as attaching to the ball  //
+  // as needed.                                   //
+  // ============================================ //
   function Player() {
     this.initialize.apply(this, arguments);
   }
@@ -338,6 +362,11 @@
   };
 
 
+  // ============================================ //
+  // Goalkeeper                                   //
+  //                                              //
+  // A special variant of Players.                //
+  // ============================================ //
   function Goalkeeper() {
     this.initialize.apply(this, arguments);
   }
@@ -352,6 +381,15 @@
     );
   };
 
+
+  // ============================================ //
+  // Ball                                         //
+  //                                              //
+  // Handles the representation, attachment, and  //
+  // movement of the ball.                        //
+  //                                              //
+  // NOTE: rotation is currently off.             //
+  // ============================================ //
   function Ball() {
     _.bindAll(this, 'passToPlayer', 'attachToPlayer');
     var self = this;
@@ -460,6 +498,12 @@
     }, dur);
   };
 
+
+  // ============================================ //
+  // BOOTSTRAPPING                                //
+  //                                              //
+  // This code is just kicking things off.        //
+  // ============================================ //
   var field = Snap('#interactive');
 
   var pitch = new Pitch(field, 1.5);
@@ -490,6 +534,13 @@
   }
   calculateOffsides();
 
+
+  // ============================================ //
+  // FINITE STATE MACHINES                        //
+  //                                              //
+  // These handle all user interaction (but for   //
+  // dragging players).                           //
+  // ============================================ //
   var soccerFsm = new machina.Fsm({
     initialize : function() {
       var self = this;
