@@ -220,7 +220,7 @@
   Team.prototype.markOffsidePosition = function(left) {
     for(var i=0,l=this.players.length;i<l;++i) {
       if(this.players[i].x < left) {
-        console.log("OFFSIDE");
+        // console.log("OFFSIDE");
       }
       this.players[i].representation.attr({
         // fill : this.players[i].x < left ? '#B13631' : this.color,
@@ -283,6 +283,12 @@
     var newCenter = { cx : this.x, cy : this.y };
     this.representation.attr(newCenter);
     this.clickable.attr(newCenter);
+    if(this.shadowLine) {
+      this.shadowLine.attr({
+        x2 : this.x,
+        y2 : this.y
+      });
+    }
   };
   Player.prototype.animate = function(attr, duration, easing, callback) {
     this.representation.animate.call(this.representation, attr, duration, easing);
@@ -293,6 +299,12 @@
     }
     if(attr.cx) { this.x = attr.cx; }
     if(attr.cy) { this.y = attr.cy; }
+    if(this.shadowLine) {
+      this.shadowLine.animate({
+        x2 : this.x,
+        y2 : this.y
+      }, duration, easing);
+    }
   };
   Player.prototype.show = function(dur) {
     this.representation.animate({
@@ -319,18 +331,22 @@
       this.clearShadow();
     }
     this.shadow = this.team.field.circle(this.x, this.y, this.radius);
-    console.log(this.team.color);
+    // console.log(this.team.color);
     this.shadow.attr({
       fill : this.team.color || '#821B0D',
       stroke : this.team.stroke,
       'stroke-width' : 2,
       opacity : 0.5
     });
+    this.shadowLine = this.team.field.line(this.x, this.y, this.x, this.y);
+    this.shadowLine.attr({
+      stroke : this.team.color,
+      'stroke-width' : 1.5
+    });
   };
   Player.prototype.clearShadow = function() {
-    if(this.shadow) {
-      this.shadow.remove();
-    }
+    if(this.shadow) { this.shadow.remove(); }
+    if(this.shadowLine) { this.shadowLine.remove(); }
   };
 
   // we're doing a kinda sneaky trick here, so we use (fast) transforms
