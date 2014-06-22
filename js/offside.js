@@ -604,6 +604,23 @@
             self.timeouts.forwardPassTimeout = setTimeout(function() {
               b.passToPlayer(offense.players[6]);
             }, 700);
+          }, 500);
+        },
+        offside_run : function() {
+          var self = this;
+          clearTimeout(this.timeouts.repositionTimeout);
+          clearTimeout(this.timeouts.forwardPassTimeout);
+          this.handle('starting_position', 20);
+          self.timeouts.forwardPassTimeout = setTimeout(function() {
+            b.passToPlayer(offense.players[6]);
+          }, 500);
+          this.timeouts.repositionTimeout = setTimeout(function() {
+            offense.repositionPlayers(
+              [[377,145],[133,172],[266,239],[184,185],[281,193],
+                  [260,62],[75,196],[156,154],[145,90],[277,138],[227,103]]);
+            defense.repositionPlayers(
+              [[33,145],[149,227],[189,64],[92,162],[199,86],[114,69],
+                  [122,115],[216,157],[173,122],[207,222],[135,201]]);
           }, 600);
         }
       }
