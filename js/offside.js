@@ -495,10 +495,10 @@
       // console.log(player.x, newX, player.y, newY);
       self.container.animate({
         transform : 'translate('+newX+','+newY+')'
-      }, dur, lerpMe);
+      }, dur, undefined, lerpMe);
       self.rotationalContainer.animate({
         transform : self.getRotationString(newX, newY)
-      });
+      }, dur);
       self.x = newX;
       self.y = newY;
       parts -= 1;
