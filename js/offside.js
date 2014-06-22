@@ -203,6 +203,9 @@
   };
   Team.prototype.markOffsidePosition = function(left) {
     for(var i=0,l=this.players.length;i<l;++i) {
+      if(this.players[i].x < left) {
+        console.log("OFFSIDE");
+      }
       this.players[i].representation.attr({
         // fill : this.players[i].x < left ? '#B13631' : this.color,
         stroke : this.players[i].x < left ? '#821B0D' : this.stroke,
@@ -330,6 +333,7 @@
     this.ball = ball;
   };
   Player.prototype.detachBall = function() {
+    this.ball.player = null;
     this.ball = null;
   };
 
@@ -349,6 +353,7 @@
   };
 
   function Ball() {
+    _.bindAll(this, 'passToPlayer', 'attachToPlayer');
     var self = this;
     this.x = 0;
     this.y = 0;
@@ -374,7 +379,7 @@
     x = x || this.x;
     y = y || this.y;
     var rotation = 4 * (x + y);
-    console.log('setting rotationalContainer to', rotation);
+    // console.log('setting rotationalContainer to', rotation);
     rotation = 0;
     return 'rotate('+rotation+')';
   };
@@ -391,7 +396,10 @@
   };
   Ball.prototype.attachToPlayer = function(player) {
     if(this.player === player) { return; }
-    if(this.player) { this.player.detachBall(); }
+    if(this.player) {
+      // console.log('attach: detaching from player');
+      this.player.detachBall();
+    }
     this.player = player;
     // this.player.group.add(this.container);
     player.attachBall(this);
@@ -399,22 +407,25 @@
   };
   Ball.prototype.passToPlayer = function(player, dur) {
     var self = this;
-    dur = dur || 120;
-    if(this.player) { this.player.detachBall(); }
+    dur = dur || 150;
+    if(this.player) {
+      // console.log('pass: detaching from player');
+      this.player.detachBall();
+    }
     //LERP
-    var parts = 6;
-    var targetX = player.x - player.radius;
-    var targetY = player.y;
+    var parts = 4;
     // console.log(targetX, targetY);
     function lerpMe() {
+      var targetX = player.x - player.radius;
+      var targetY = player.y;
       if(parts === 0) {
-        console.log('attaching to new player');
+        // console.log('pass: attaching to new player');
         self.attachToPlayer(player);
         return;
       }
       var newX = (self.x - targetX) / parts + targetX;
       var newY = (self.y - targetY) / parts + targetY;
-      // console.log(newX, newY);
+      // console.log(player.x, newX, player.y, newY);
       self.container.animate({
         transform : 'translate('+newX+','+newY+')'
       }, dur, lerpMe);
@@ -463,9 +474,11 @@
 
   // and finally
   function calculateOffsides() {
+    // console.log('calculating offsides');
     var offside = defense.getOffsidePosition();
     offside = Math.min(offside, pitch.length / 2 + pitch.offset);
     if(!b.player) {
+      // console.log('ball unattached: no offsides');
       return; // if the ball isn't controlled by a player
               // then it's passing and offside doesn't move
               // until it is again
@@ -613,7 +626,7 @@
           this.handle('starting_position', 20);
           self.timeouts.forwardPassTimeout = setTimeout(function() {
             b.passToPlayer(offense.players[6]);
-          }, 500);
+          }, 450);
           this.timeouts.repositionTimeout = setTimeout(function() {
             offense.repositionPlayers(
               [[377,145],[133,172],[266,239],[184,185],[281,193],
@@ -621,7 +634,7 @@
             defense.repositionPlayers(
               [[33,145],[149,227],[189,64],[92,162],[199,86],[114,69],
                   [122,115],[216,157],[173,122],[207,222],[135,201]]);
-          }, 600);
+          }, 500);
         }
       }
     }
