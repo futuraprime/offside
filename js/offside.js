@@ -38,7 +38,7 @@
       transform : 'translate('+offset+','+offset+')'
     });
 
-    var padding = this.padding = 20;
+    var padding = this.padding;
     var lineAttrs = {
       fill : 'none',
       stroke : '#fff',
@@ -139,6 +139,7 @@
   }
   Pitch.prototype.standardLength = 334;
   Pitch.prototype.standardWidth = 223;
+  Pitch.prototype.padding = 20;
   Pitch.prototype.setOffside = function(left) {
     this.offside = left;
     this.offsideZone.attr({
@@ -540,6 +541,10 @@
   console.log(window.innerHeight);
   var pitchDesiredHeight = window.innerHeight / 2.1;
   var pitchScaleFactor = Math.min(1.5, pitchDesiredHeight/Pitch.prototype.standardWidth);
+
+  // making sure we don't have a pitch that's too wide for the screen...
+  var pitchWidth = Pitch.prototype.standardLength + Pitch.padding * 2;
+  pitchScaleFactor = Math.min(pitchScaleFactor, window.innerWidth/pitchWidth);
   var pitch = new Pitch(field, pitchScaleFactor);
   $('#interactive').css({
     height : pitch.width + pitch.padding * 3
