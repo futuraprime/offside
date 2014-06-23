@@ -196,11 +196,12 @@
         ]);
       }
     }
+    var offset = this.pitch.offset;
     for(i=0,l=positions.length;i<l;++i) {
       if(!positions[i] || !positions[i].length) { continue; }
       this.players[i].animate({
-        cx : this.pitch.scaleValue(positions[i][0] + this.pitch.offset),
-        cy : this.pitch.scaleValue(positions[i][1] + this.pitch.offset)
+        cx : this.pitch.scaleValue(positions[i][0]) + offset,
+        cy : this.pitch.scaleValue(positions[i][1]) + offset
       }, 300, mina.easeout);
     }
     calculateOffsides();
@@ -209,8 +210,8 @@
     var positions = [];
     for(var i=0,l=this.players.length;i<l;++i) {
       positions.push([
-        Math.round(this.pitch.unscaleValue(this.players[i].x) - this.pitch.offset),
-        Math.round(this.pitch.unscaleValue(this.players[i].y) - this.pitch.offset)
+        Math.round(this.pitch.unscaleValue(this.players[i].x - this.pitch.offset)),
+        Math.round(this.pitch.unscaleValue(this.players[i].y - this.pitch.offset))
       ]);
     }
     return JSON.stringify(positions);
@@ -680,10 +681,10 @@
       standard_position : {
         _onEnter : function() {
           offense.repositionPlayers(
-            g
+            [[334,112],[190,136],[282,180],[230,133],[278,130],[279,37],[232,179],[234,87],[193,78],[280,83],[234,41]]
           );
           defense.repositionPlayers(
-            [[-17,95],[83,177],[90,15],[39,95],[119,95],[49,39],[80,65],[79,124],[123,38],[119,149],[47,152]]
+            [[0,112],[100,194],[107,32],[56,112],[136,112],[66,56],[97,82],[96,141],[140,55],[136,166],[64,169]]
           );
         }
       },
@@ -698,11 +699,11 @@
           defense.clearShadows();
           b.attachToPlayer(offense.players[1]);
           offense.repositionPlayers(
-            [[327,95],[96,109],[241,192],[141,137],[257,144],[233,59],[63,143],[119,121],[122,35],[245,93],[196,45]]
-          );
+            [[377,145],[146,159],[291,242],[191,187],[307,194],[283,109],
+                [113,193],[169,171],[172,85],[295,143],[246,95]]);
           defense.repositionPlayers(
-            [[-17,95],[99,177],[139,14],[45,115],[176,33],[79,35],[89,70],[197,109],[139,72],[177,159],[85,151]]
-          );
+            [[33,145],[149,227],[189,64],[95,165],[226,83],[129,85],
+                [139,120],[247,159],[189,122],[227,209],[135,201]]);
         },
         over_forward : function() {
           var self = this;
@@ -711,11 +712,11 @@
           this.handle('starting_position', 20);
           this.timeouts.repositionTimeout = setTimeout(function() {
             offense.repositionPlayers(
-              [[327,95],[83,122],[216,189],[134,135],[231,143],[210,12],[25,146],[106,104],[95,40],[227,88],[177,53]]
-            );
+              [[377,145],[133,172],[266,239],[184,185],[281,193],
+                  [260,62],[75,196],[156,154],[145,90],[277,138],[227,103]]);
             defense.repositionPlayers(
-              [[-17,95],[99,177],[139,14],[42,112],[149,36],[64,19],[72,65],[166,107],[123,72],[157,172],[85,151]]
-            );
+              [[33,145],[149,227],[189,64],[92,162],[199,86],[114,69],
+                  [122,115],[216,157],[173,122],[207,222],[135,201]]);
             self.timeouts.forwardPassTimeout = setTimeout(function() {
               b.passToPlayer(offense.players[6]);
             }, 700);
@@ -733,11 +734,11 @@
           }, 450);
           this.timeouts.repositionTimeout = setTimeout(function() {
             offense.repositionPlayers(
-              [[327,95],[83,122],[216,189],[134,135],[231,143],[210,12],[25,146],[106,104],[95,40],[227,88],[177,53]]
-            );
+              [[377,145],[133,172],[266,239],[184,185],[281,193],
+                  [260,62],[75,196],[156,154],[145,90],[277,138],[227,103]]);
             defense.repositionPlayers(
-              [[-17,95],[99,177],[139,14],[42,112],[149,36],[64,19],[72,65],[166,107],[123,72],[157,172],[85,151]]
-            );
+              [[33,145],[149,227],[189,64],[92,162],[199,86],[114,69],
+                  [122,115],[216,157],[173,122],[207,222],[135,201]]);
           }, 500);
         }
       }
