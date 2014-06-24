@@ -371,6 +371,7 @@
     playersFsm.transition('in_motion');
   };
   Player.prototype.onStart = function() {
+    clearAllShadows();
     if(this.hidden) { return; }
     this.moveStartX = this.x;
     this.moveStartY = this.y;
@@ -562,6 +563,11 @@
   offense.addPlayer(11);
   var defense = new Team(pitch, 'left', '#00477A');
   defense.addPlayer(11);
+
+  function clearAllShadows() {
+    offense.clearShadows();
+    defense.clearShadows();
+  }
 
   var b = new Ball();
   b.attachToPlayer(offense.players[1]);
